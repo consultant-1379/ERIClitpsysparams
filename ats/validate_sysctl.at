@@ -1,0 +1,13 @@
+runLitpScript two-node-std.inc
+
+litp create -p /deployments/site1/clusters/cluster1/nodes/node2/configs/sysctlnode2config -t sysparam-node-config 
+litp create -p /deployments/site1/clusters/cluster1/nodes/node1/configs/sysctlnode1config -t sysparam-node-config 
+litp create -p /deployments/site1/clusters/cluster1/nodes/node1/configs/sysctlnode1config2 -t sysparam-node-config 
+
+assertErrorMessage "CardinalityError" create_plan 
+
+litp create -p /deployments/site1/clusters/cluster1/nodes/node2/configs/sysctlnode2config/params/sysctltest01a -t sysparam -o key="kernel.msgmnb" value="65534" 
+litp create -p /deployments/site1/clusters/cluster1/nodes/node1/configs/sysctlnode1config/params/sysctltest01a -t sysparam -o key="kernel.msgmnb" value="65534" 
+litp create -p /deployments/site1/clusters/cluster1/nodes/node1/configs/sysctlnode1config2/params/sysctltest01b -t sysparam -o key="net.ipv4.ip_route" value="65534" 
+
+assertErrorMessage "Only one \"sysparam-node-config\" may be configured per node" create_plan

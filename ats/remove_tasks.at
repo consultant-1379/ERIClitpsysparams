@@ -1,0 +1,13 @@
+runLitpScript two-node-std.inc
+
+litp create -t sysparam-node-config -p /deployments/site1/clusters/cluster1/nodes/node1/configs/sysparams
+litp create -t sysparam -p /deployments/site1/clusters/cluster1/nodes/node1/configs/sysparams/params/param1 -o key=kernel.domainname value="example.com"
+litp create -t sysparam -p /deployments/site1/clusters/cluster1/nodes/node1/configs/sysparams/params/param2 -o key=kernel.modprobe value="/sbin/mod probe"
+litp create_plan
+litp run_plan
+
+litp remove -p /deployments/site1/clusters/cluster1/nodes/node1/configs/sysparams
+litp create_plan
+assertPlanLength 2
+assertTask 0 sysparams::param node1 /deployments/site1/clusters/cluster1/nodes/node1/configs/sysparams/params/param1 Initial
+assertTask 0 sysparams::param node1 /deployments/site1/clusters/cluster1/nodes/node1/configs/sysparams/params/param2 Initial

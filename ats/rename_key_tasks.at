@@ -1,0 +1,12 @@
+runLitpScript two-node-std.inc
+
+litp create -t sysparam-node-config -p /ms/configs/sysparams
+litp create -t sysparam -p /ms/configs/sysparams/params/param1 -o key=kernel.domainname value="example.com"
+litp create -t sysparam -p /ms/configs/sysparams/params/param2 -o key=kernel.modprobe value="/sbin/mod probe"
+litp create_plan
+litp run_plan
+
+litp update -p /ms/configs/sysparams/params/param1 -o key="kernel.hostname" value="ms1"
+
+#Disallow changing key names when already applied
+assertErrorMessage "ValidationError" create_plan 

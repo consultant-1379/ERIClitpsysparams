@@ -1,0 +1,16 @@
+runLitpScript two-node-std.inc
+
+litp create -t sysparam-node-config -p /ms/configs/sysparams
+litp create -t sysparam -p /ms/configs/sysparams/params/param1 -o key=kernel.domainname value="example.com"
+litp create -t sysparam -p /ms/configs/sysparams/params/param2 -o key=kernel.modprobe value="/sbin/mod probe"
+litp create_plan
+litp run_plan
+
+assertConfigTask ms1 sysparams::param "ms1_/ms/configs/sysparams/params/param1_kernel.domainname" /ms/configs/sysparams/params/param1 ensure="present" key="kernel.domainname" value="example.com"
+assertConfigTask ms1 sysparams::param "ms1_/ms/configs/sysparams/params/param2_kernel.modprobe" /ms/configs/sysparams/params/param2 ensure="present" key="kernel.modprobe"  value="/sbin/mod probe"
+
+litp update -p /ms/configs/sysparams/params/param1 -o value="ericsson.se"
+litp create_plan
+litp run_plan
+
+assertConfigTask ms1 sysparams::param "ms1_/ms/configs/sysparams/params/param1_kernel.domainname" /ms/configs/sysparams/params/param1 ensure="present" key="kernel.domainname" value="ericsson.se"

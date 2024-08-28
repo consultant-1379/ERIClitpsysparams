@@ -1,0 +1,10 @@
+runLitpScript two-node-std.inc
+
+litp create -p /deployments/site1/clusters/cluster1/nodes/node1/configs/sysctlnode1config -t sysparam-node-config
+
+
+litp create -p /deployments/site1/clusters/cluster1/nodes/node1/configs/sysctlnode1config/params/sysctl_1 -t sysparam -o key="kernel.msgmnb" value="65534"
+litp create -p /deployments/site1/clusters/cluster1/nodes/node1/configs/sysctlnode1config/params/sysctl_2 -t sysparam -o key="kernel.msgmnb" value="65534"
+
+assertErrorMessage "/deployments/site1/clusters/cluster1/nodes/node1/configs/sysctlnode1config/params/sysctl_1" create_plan
+assertErrorMessage "/deployments/site1/clusters/cluster1/nodes/node1/configs/sysctlnode1config/params/sysctl_2" create_plan

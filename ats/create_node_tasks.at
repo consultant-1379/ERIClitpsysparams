@@ -1,0 +1,12 @@
+runLitpScript two-node-std.inc
+
+litp create -t sysparam-node-config -p /deployments/site1/clusters/cluster1/nodes/node1/configs/sysparams
+litp create -t sysparam -p /deployments/site1/clusters/cluster1/nodes/node1/configs/sysparams/params/param1 -o key=net.ipv6.bindv6only value="1"
+litp create_plan
+litp run_plan
+
+assertConfigTask node1 sysparams::param "node1_/deployments/site1/clusters/cluster1/nodes/node1/configs/sysparams/params/param1_net.ipv6.bindv6only" /deployments/site1/clusters/cluster1/nodes/node1/configs/sysparams/params/param1 key=net.ipv6.bindv6only  ensure=present value=1
+
+assertState -p /deployments/site1/clusters/cluster1/nodes/node1/configs/sysparams/params/param1 Applied
+assertState -p /deployments/site1/clusters/cluster1/nodes/node1/configs/sysparams/params Applied
+assertState -p /deployments/site1/clusters/cluster1/nodes/node1/configs/sysparams Applied
